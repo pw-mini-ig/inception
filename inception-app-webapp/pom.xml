@@ -66,12 +66,19 @@
         </exclusion>
       </exclusions>
     </dependency>
-    
+
     <!-- INCEPTION - ANNOTATION RECOMMENDATION FUNCTIONALITY -->
     <dependency>
       <groupId>de.tudarmstadt.ukp.inception.app</groupId>
       <artifactId>inception-recommendation</artifactId>
     </dependency>
+
+
+  <!-- INCEPTION - ANNOTATION VISUALISATION FUNCTIONALITY -->
+  <dependency>
+      <groupId>pl.edu.pw.mini.ig</groupId>
+      <artifactId>inception-visualisation</artifactId>
+  </dependency>
     <!--  
     <dependency>
       <groupId>de.tudarmstadt.ukp.inception.app</groupId>
