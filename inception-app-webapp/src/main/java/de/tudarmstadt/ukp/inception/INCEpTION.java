@@ -76,7 +76,6 @@ import de.tudarmstadt.ukp.inception.app.config.InceptionBanner;
 @ComponentScan(
     basePackages = { 
             "de.tudarmstadt.ukp.inception",
-            "pl.edu.pw.mini.ig",
             "de.tudarmstadt.ukp.clarin.webanno" },
     excludeFilters = {
         @Filter(type = FilterType.REGEX, pattern = ".*AutoConfiguration"),
