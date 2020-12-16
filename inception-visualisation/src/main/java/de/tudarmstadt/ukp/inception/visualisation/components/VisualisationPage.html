@@ -5,16 +5,33 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <wicket:head>
-    <link rel="stylesheet" href="../../../../../../../../js/lib/treant-js-master/Treant.css" type="text/css">
-    <script type="text/javascript"  src="../../../../../../../../js/lib/treant-js-master/vendor/raphael.js"></script>
-    <script type="text/javascript" src="../../../../../../../../js/lib/treant-js-master/Treant.js"></script>
-    <script type="text/javascript" src="../../../../../../../../js/test.js"></script>
+    <style>
+        body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { margin:0; padding:0; }
+table { border-collapse:collapse; border-spacing:0; }
+fieldset,img { border:0; }
+address,caption,cite,code,dfn,em,strong,th,var { font-style:normal; font-weight:normal; }
+caption,th { text-align:left; }
+h1,h2,h3,h4,h5,h6 { font-size:100%; font-weight:normal; }
+q:before,q:after { content:''; }
+abbr,acronym { border:0; }
+
+body { background: #fff; }
+/* optional Container STYLES */
+.chart { height: 600px; margin: 5px; width: 900px; }
+.Treant > .node { padding: 3px; border: 1px solid #484848; border-radius: 3px; }
+.Treant > .node img { width: 100%; height: 100%; }
+
+.Treant .collapse-switch { width: 100%; height: 100%; border: none; }
+.Treant .node.collapsed { background-color: #DEF82D; }
+.Treant .node.collapsed .collapse-switch { background: none; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js" integrity="sha512-tBzZQxySO5q5lqwLWfu8Q+o4VkTcRGOeQGVQ0ueJga4A1RKuzmAu5HXDOXLEjpbKyV7ow9ympVoa6wZLEzRzDg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/treant-js/1.0/Treant.min.js" integrity="sha512-ADpWKsaOuAegRSoUObE1si2VF6HQJyQR3Zy44l7s6YsGA6BnPIrIwN9uKJ0rsMhtDAMFqnGZhQXMJcsWSp40pA==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/treant-js/1.0/Treant.css" integrity="sha512-ySoXPqkgXC7K7IS5vOdi47uEpct2yJ3MkYVVVHiM7FOmdDnBUVSmB/D1ps2Pf6jBJnBMyh1EPJLpWh2uCzOLdg==" crossorigin="anonymous" />
 </wicket:head>
 <body>
-<div>
-    <p>
-        Hello world
-    </p>
+<div id="spinner"></div>
+<div class="chart Treant loaded" id="treant_tree" style="width: 100%; height: 100%;">
 </div>
 </body>
 </html>

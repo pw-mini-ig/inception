@@ -1,5 +1,6 @@
 package de.tudarmstadt.ukp.inception.visualisation.components;
 
+import de.tudarmstadt.ukp.inception.visualisation.jsreferences.VisualisationScriptJavascriptReference;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.mapper.parameter.PageParameters;

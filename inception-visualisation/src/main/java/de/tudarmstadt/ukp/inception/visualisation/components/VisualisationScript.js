@@ -1,1 +1,0 @@
-alert("Siemano z Wizualizacji");
