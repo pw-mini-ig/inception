@@ -1,12 +1,12 @@
-package pl.edu.pw.mini.ig.visualisation.components;
+package de.tudarmstadt.ukp.inception.visualisation.components;
 
 import de.tudarmstadt.ukp.clarin.webanno.api.ProjectService;
 import de.tudarmstadt.ukp.clarin.webanno.security.UserDao;
 import de.tudarmstadt.ukp.clarin.webanno.ui.core.menu.MenuItem;;
 import org.apache.wicket.Page;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import pl.edu.pw.mini.ig.visualisation.config.VisualisationServiceAutoConfiguration;
+import org.springframework.core.annotation.Order;
+import de.tudarmstadt.ukp.inception.visualisation.config.VisualisationServiceAutoConfiguration;
 
 /**
  * <p>
@@ -14,7 +14,7 @@ import pl.edu.pw.mini.ig.visualisation.config.VisualisationServiceAutoConfigurat
  * {@link VisualisationServiceAutoConfiguration#visualisationPageMenuItem()}.
  * </p>
  */
-@Component
+@Order(370)
 public class VisualisationPageMenuItem
     implements MenuItem {
 

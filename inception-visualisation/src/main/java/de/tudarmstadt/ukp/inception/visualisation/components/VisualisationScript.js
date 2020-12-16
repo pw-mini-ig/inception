@@ -1,0 +1,1 @@
+alert("Siemano z Wizualizacji");

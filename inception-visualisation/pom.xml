@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>pl.edu.pw.mini.ig</groupId>
+    <groupId>de.tudarmstadt.ukp.inception.app</groupId>
     <artifactId>inception-visualisation</artifactId>
     <name>INCEpTION - Visualisation</name>
     <version>0.18.0-SNAPSHOT</version>

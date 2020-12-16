@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-pl.edu.pw.mini.ig.visualisation.config.VisualisationServiceAutoConfiguration
+de.tudarmstadt.ukp.inception.visualisation.config.VisualisationServiceAutoConfiguration

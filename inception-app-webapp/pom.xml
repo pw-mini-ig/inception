@@ -76,7 +76,7 @@
 
   <!-- INCEPTION - ANNOTATION VISUALISATION FUNCTIONALITY -->
   <dependency>
-      <groupId>pl.edu.pw.mini.ig</groupId>
+      <groupId>de.tudarmstadt.ukp.inception.app</groupId>
       <artifactId>inception-visualisation</artifactId>
   </dependency>
     <!--  
