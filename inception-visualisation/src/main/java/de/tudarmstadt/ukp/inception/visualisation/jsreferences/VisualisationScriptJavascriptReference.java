@@ -39,6 +39,7 @@ public class VisualisationScriptJavascriptReference
         dependencies.add(CssHeaderItem.forReference(TreantCssReference.get()));
         dependencies.add(JavaScriptHeaderItem.forReference(RaphaelJavascriptReference.get()));
         dependencies.add(JavaScriptHeaderItem.forReference(TreantJavascriptReference.get()));
+        dependencies.add(JavaScriptHeaderItem.forReference(JsYamlJavascriptReference.get()));
 
         return dependencies;
     }

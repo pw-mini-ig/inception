@@ -156,6 +156,23 @@ $(document).ready(function () {
     }
   };
 
+  yamlContent = `
+  type: institutionalStatement
+  text: Operators and Certifiers must comply with regulations and best practices.
+  attribute:
+    logicalOperator: AND
+    components:
+      - Operators
+      - Certifiers
+  deontic: must
+  aim: comply
+  directObject:
+    logicalOperator: AND
+    components:
+      - regulations
+      - best practices
+  `;
+
   var currentTree = null;
 
   function drawFirstTree() {
@@ -172,8 +189,16 @@ $(document).ready(function () {
     currentTree = drawTree('#treant_tree', exampleStatementJSON2);
   }
 
+  function drawYamlTree() {
+    if(currentTree) {
+      currentTree.destroy();
+    }
+    currentTree = drawTree('#treant_tree', jsyaml.load(yamlContent))
+  }
+
   $('#first-button').click(drawFirstTree);
   $('#second-button').click(drawSecondTree);
+  $('#yaml-button').click(drawYamlTree);
 
   /* ================= TREE DRAWING =============== */
 
@@ -183,6 +208,7 @@ $(document).ready(function () {
       divId - id of the div inside which tree will be drawn
       statement - single Statement inside yaml file that will be drawn 
   */
+
   function drawTree(divId, statement) {
 
     let chart_config = {
