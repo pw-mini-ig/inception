@@ -305,30 +305,36 @@ class VisualisationController {
     Declare all method as arrow functions so 'this' keyword refers to class instance
     ====================IMPORTANT !!==================================================
   */
+
+  changeButtonDisabledState = (state) => {
+    $(this.nextButtonId).prop('disabled', state);
+    $(this.prevButtonId).prop('disabled', state);
+  }
+
   loadStatements = async () => {
-    $(this.nextButtonId).prop('disabled', true);
-    $(this.prevButtonId).prop('disabled', true);
-    $(this.counterId).text('');
+    this.changeButtonDisabledState(true);
 
     try {
       const file = $(this.fileInputId).prop('files')[0];
       if(file === undefined) {
+        this.changeButtonDisabledState(false);
         return; // no file was selected
       }
-      
+
       this.yamlString = await file.text();
       this.statements = jsyaml.load(this.yamlString).statements;
       if(!Array.isArray(this.statements)) {
         alert('Uploaded yaml does not contain statements!');
+        $(this.counterId).text('');
         return;
       }
     } catch(error) {
       alert('Uploaded yaml file has incorrect format!');
+      $(this.counterId).text('');
       return;
     }
     
-    $(this.nextButtonId).prop('disabled', false);
-    $(this.prevButtonId).prop('disabled', false);
+    this.changeButtonDisabledState(false);
 
     this.currentStatementIndex = 0;
     this.drawCurrentTree();
