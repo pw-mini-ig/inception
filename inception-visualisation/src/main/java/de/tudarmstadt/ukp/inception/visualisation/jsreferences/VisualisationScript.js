@@ -347,7 +347,7 @@ class VisualisationController {
     try {
       this.currentTree = this.treeParserHelper.drawTree(this.treeDivId, this.statements[this.currentStatementIndex]);
     } catch(error) {
-      alert(`Statement #${this.currentStatementIndex + 1} has incorrect format and cannot be parsed!`);
+      alert(`Statement #${this.currentStatementIndex + 1} has incorrect format and cannot be parsed! - ${this.statments[this.currentStatementIndex]?.text}`);
     }
     
     $(this.counterId).text(`${this.currentStatementIndex + 1}/${this.statements.length}`)
