@@ -72,7 +72,7 @@ class TreeParserHelper {
       return this.getConstitutiveStatementNodeStructure(statement, titlePrefix);
     }
 
-    throw 'Statement has incorrect type';
+    throw new Error(`${statement} is expected to contain logicalOperator (as Statement Combination) or be valid InstitutionalStatement`);
   }
 
   getStatementCombinationNodeStructure(statementCombination, titlePrefix) {
@@ -311,15 +311,11 @@ class VisualisationController {
     $(this.counterId).text('');
 
     try {
-      var file;
-      
-      try {
-        file = $(this.fileInputId).prop('files')[0];
-      }
-      catch(error) {
+      const file = $(this.fileInputId).prop('files')[0];
+      if(file === undefined) {
         return; // no file was selected
       }
-
+      
       this.yamlString = await file.text();
       this.statements = jsyaml.load(this.yamlString).statements;
       if(!Array.isArray(this.statements)) {
