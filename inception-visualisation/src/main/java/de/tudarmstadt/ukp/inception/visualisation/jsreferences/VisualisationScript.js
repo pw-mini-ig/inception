@@ -25,181 +25,7 @@ const CONSTITUTING_PROPERTY = "Constituting property";
 const PREFIX_SEPARATOR = " - ";
 const COMBINATION_POSTFIX = "Combination";
 
-
-$(document).ready(function () {
-
-  var exampleStatementJSON;
-
-  //  exampleStatementJSON = {
-  //    "type": "institutionalStatement",
-  //    "text": "Certifier registers certification for organic farmer.",
-  //    "attribute": "Certifier",
-  //    "aim": "registers",
-  //    "directObject": "certification",
-  //    "indirectObject": "organic farmer"
-  //  };
-  //
-  //  exampleStatementJSON = {
-  //    "type": "institutionalStatement",
-  //    "text": "The Council may have an advisory committee.",
-  //    "constitutedEntity": "The Council",
-  //    "deontic": "may",
-  //    "constitutiveFunction": "have",
-  //    "constitutingProperty": "an advisory committee"
-  //  };
-  //
-  //  exampleStatementJSON = {
-  //    "type": "institutionalStatement",
-  //    "text": "The State requires employers to provide notification to employees of the availability of unemployment compensation at the time of separation from employment.\n",
-  //    "attribute": "The State",
-  //    "aim": "requires",
-  //    "directObject": {
-  //      "type": "institutionalStatement",
-  //      "text": "employers to provide notification to employees of the availability of unemployment compensation at the time of separation from employment.\n",
-  //      "attribute": "employers",
-  //      "aim": "to provide",
-  //      "directObject": {
-  //        "element": "notification",
-  //        "properties": [
-  //          "of the availability of unemployment compensation"
-  //        ]
-  //      },
-  //      "indirectObject": "to employees",
-  //      "activationCondition": "at the time of separation from employment."
-  //    }
-  //  };
-  //
-  //  exampleStatementJSON = {
-  //    "type": "institutionalStatement",
-  //    "text": "Certified organic farmers must submit an organic systems plan.",
-  //    "attribute": {
-  //      "element": "farmers",
-  //      "properties": [
-  //        "Certified",
-  //        "organic"
-  //      ]
-  //    },
-  //    "deontic": "must",
-  //    "aim": "submit",
-  //    "directObject": "an organic systems plan"
-  //  };
-  //
-  //  exampleStatementJSON = {
-  //    "type": "institutionalStatement",
-  //    "text": "A certified farmer whose certification is suspended by the  Secretary may submit a recertification request.\n",
-  //    "attribute": {
-  //      "element": "farmer",
-  //      "properties": [
-  //        "certified",
-  //        {
-  //          "type": "institutionalStatement",
-  //          "text": "whose certification is suspended by the Secretary",
-  //          "aim": "is suspended",
-  //          "attribute": "the Secretary",
-  //          "directObject": "certification"
-  //        }
-  //      ]
-  //    },
-  //    "deontic": "may",
-  //    "aim": "submit",
-  //    "directObject": {
-  //      "element": "request",
-  //      "properties": [
-  //        "recertification"
-  //      ]
-  //    }
-  //  };
-
-  exampleStatementJSON = {
-    "type": "institutionalStatement",
-    "text": "Program managers who believe that an operation has violated the Act may pursue revocation proceedings.\n",
-    "attribute": {
-      "element": "Program managers",
-      "properties": [
-        {
-          "element": "who believe",
-          "properties": [
-            {
-              "type": "statementOfFact",
-              "text": "that an operation has violated the Act",
-              "attribute": "a certified operation",
-              "aim": "has violated",
-              "directObject": "the Act"
-            }
-          ]
-        }
-      ]
-    },
-    "deontic": "may",
-    "aim": "pursue",
-    "directObject": "revocation proceedings"
-  };
-
-  exampleStatementJSON2 = {
-    "type": "institutionalStatement",
-    "text": "Operators and Certifiers must comply with regulations and best practices.",
-    "attribute": {
-      "logicalOperator": "AND",
-      "components": [
-        "Operators",
-        "Certifiers"
-      ]
-    },
-    "deontic": "must",
-    "aim": "comply",
-    "directObject": {
-      "logicalOperator": "AND",
-      "components": [
-        "regulations",
-        "best practices"
-      ]
-    }
-  };
-
-  yamlContent = `
-  type: institutionalStatement
-  text: Operators and Certifiers must comply with regulations and best practices.
-  attribute:
-    logicalOperator: AND
-    components:
-      - Operators
-      - Certifiers
-  deontic: must
-  aim: comply
-  directObject:
-    logicalOperator: AND
-    components:
-      - regulations
-      - best practices
-  `;
-
-  var currentTree = null;
-
-  function drawFirstTree() {
-    if (currentTree) {
-      currentTree.destroy();
-    }
-    currentTree = drawTree('#treant_tree', exampleStatementJSON);
-  }
-
-  function drawSecondTree() {
-    if (currentTree) {
-      currentTree.destroy();
-    }
-    currentTree = drawTree('#treant_tree', exampleStatementJSON2);
-  }
-
-  function drawYamlTree() {
-    if(currentTree) {
-      currentTree.destroy();
-    }
-    currentTree = drawTree('#treant_tree', jsyaml.load(yamlContent))
-  }
-
-  $('#first-button').click(drawFirstTree);
-  $('#second-button').click(drawSecondTree);
-  $('#yaml-button').click(drawYamlTree);
-
+class TreeParserHelper {
   /* ================= TREE DRAWING =============== */
 
   /*
@@ -209,12 +35,12 @@ $(document).ready(function () {
       statement - single Statement inside yaml file that will be drawn 
   */
 
-  function drawTree(divId, statement) {
+  drawTree(divId, statement) {
 
     let chart_config = {
       chart: {
         container: divId,
-        animateOnInit: true,
+        animateOnInit: false,
         node: {
           collapsable: true
         },
@@ -227,9 +53,7 @@ $(document).ready(function () {
       }
     };
 
-    chart_config.nodeStructure = getStatementNodeStructure(statement, '');
-    console.log(chart_config.nodeStructure);
-    console.log(getStatementNodeStructure(statement, ''));
+    chart_config.nodeStructure = this.getStatementNodeStructure(statement, '');
 
     return new Treant(chart_config);
   }
@@ -238,20 +62,20 @@ $(document).ready(function () {
     Prefix is used if one of elements such as Direct Object, 
     Indirect Object, etc. are statements instead of words
   */
-  function getStatementNodeStructure(statement, titlePrefix) {
+  getStatementNodeStructure(statement, titlePrefix) {
 
     if (statement.logicalOperator) {
-      return getStatementCombinationNodeStructure(statement, titlePrefix);
+      return this.getStatementCombinationNodeStructure(statement, titlePrefix);
     } else if (statement.aim) {
-      return getRegulativeStatementNodeStructure(statement, titlePrefix);
+      return this.getRegulativeStatementNodeStructure(statement, titlePrefix);
     } else if (statement.constitutiveFunction) {
-      return getConstitutiveStatementNodeStructure(statement, titlePrefix);
+      return this.getConstitutiveStatementNodeStructure(statement, titlePrefix);
     }
 
     throw 'Statement has incorrect type';
   }
 
-  function getStatementCombinationNodeStructure(statementCombination, titlePrefix) {
+  getStatementCombinationNodeStructure(statementCombination, titlePrefix) {
     let nodeStructure = {
       text: {
         title: titlePrefix + STATEMENT_COMBINATION,
@@ -262,19 +86,19 @@ $(document).ready(function () {
           title: LOGICAL_OPERATOR,
           name: statementCombination.logicalOperator
         },
-        children: statementCombination.statements.map(statement => getStatementNodeStructure(statement, ''))
+        children: statementCombination.statements.map(statement => this.getStatementNodeStructure(statement, ''))
       }]
     };
 
     // orElse's type is statement
     if (statementCombination.orElse) {
-      nodeStructure.children.push(getStatementNodeStructure(statementCombination.orElse, OR_ELSE + PREFIX_SEPARATOR));
+      nodeStructure.children.push(this.getStatementNodeStructure(statementCombination.orElse, OR_ELSE + PREFIX_SEPARATOR));
     }
 
     return nodeStructure;
   }
 
-  function getRegulativeStatementNodeStructure(regulativeStatement, titlePrefix) {
+  getRegulativeStatementNodeStructure(regulativeStatement, titlePrefix) {
     let nodeStructure = {
       text: {
         title: titlePrefix + (regulativeStatement.type === INSTITUTIONAL_STATEMENT_TYPE ? REGULATIVE_STATEMENT : REGULATIVE_STATEMENT_OF_FACT),
@@ -284,45 +108,45 @@ $(document).ready(function () {
     };
 
     // ATTRIBUTE
-    nodeStructure.children.push(getComponentWithProperties(regulativeStatement.attribute, ATTRIBUTE));
+    nodeStructure.children.push(this.getComponentWithProperties(regulativeStatement.attribute, ATTRIBUTE));
 
     // DEONTIC
     if (regulativeStatement.deontic) {
-      nodeStructure.children.push(getSimpleNode(regulativeStatement.deontic, DEONTIC));
+      nodeStructure.children.push(this.getSimpleNode(regulativeStatement.deontic, DEONTIC));
     }
 
     // AIM
-    nodeStructure.children.push(getComponentWithoutProperties(regulativeStatement.aim, AIM));
+    nodeStructure.children.push(this.getComponentWithoutProperties(regulativeStatement.aim, AIM));
 
     // DIRECT OBJECT
     if (regulativeStatement.directObject) {
-      nodeStructure.children.push(getStatementOrComponentWithProperties(regulativeStatement.directObject, DIRECT_OBJECT));
+      nodeStructure.children.push(this.getStatementOrComponentWithProperties(regulativeStatement.directObject, DIRECT_OBJECT));
     }
 
     // INDIRECT OBJECT
     if (regulativeStatement.indirectObject) {
-      nodeStructure.children.push(getStatementOrComponentWithProperties(regulativeStatement.indirectObject, INDIRECT_OBJECT));
+      nodeStructure.children.push(this.getStatementOrComponentWithProperties(regulativeStatement.indirectObject, INDIRECT_OBJECT));
     }
 
     // Activation Condition
     if (regulativeStatement.activationCondition) {
-      nodeStructure.children.push(getStatementOrComponentWithoutProperties(regulativeStatement.activationCondition, ACTIVATION_CONDITION));
+      nodeStructure.children.push(this.getStatementOrComponentWithoutProperties(regulativeStatement.activationCondition, ACTIVATION_CONDITION));
     }
 
     // Execution Constraint
     if (regulativeStatement.executionConstraint) {
-      nodeStructure.children.push(getStatementOrComponentWithoutProperties(regulativeStatement.executionConstraint, EXECUTION_CONSTRAINT));
+      nodeStructure.children.push(this.getStatementOrComponentWithoutProperties(regulativeStatement.executionConstraint, EXECUTION_CONSTRAINT));
     }
 
     // OR ELSE
     if (regulativeStatement.orElse) {
-      nodeStructure.children.push(getStatementNodeStructure(regulativeStatement.orElse, OR_ELSE + PREFIX_SEPARATOR));
+      nodeStructure.children.push(this.getStatementNodeStructure(regulativeStatement.orElse, OR_ELSE + PREFIX_SEPARATOR));
     }
 
     return nodeStructure;
   }
 
-  function getConstitutiveStatementNodeStructure(constitutiveStatement, titlePrefix) {
+  getConstitutiveStatementNodeStructure(constitutiveStatement, titlePrefix) {
     let nodeStructure = {
       text: {
         title: titlePrefix + (constitutiveStatement.type === INSTITUTIONAL_STATEMENT_TYPE ? CONSTITUTIVE_STATEMENT : CONSTITUTIVE_STATEMENT_OF_FACT),
@@ -332,40 +156,40 @@ $(document).ready(function () {
     };
 
     // consistutedEntity
-    nodeStructure.children.push(getComponentWithProperties(constitutiveStatement.constitutedEntity, CONSTITUTED_ENTITY));
+    nodeStructure.children.push(this.getComponentWithProperties(constitutiveStatement.constitutedEntity, CONSTITUTED_ENTITY));
 
     // deontic
     if (constitutiveStatement.deontic) {
-      nodeStructure.children.push(getSimpleNode(constitutiveStatement.deontic, DEONTIC));
+      nodeStructure.children.push(this.getSimpleNode(constitutiveStatement.deontic, DEONTIC));
     }
 
     // constitutiveFunction
-    nodeStructure.children.push(getComponentWithoutProperties(constitutiveStatement.constitutiveFunction, CONSTITUTIVE_FUNCTION));
+    nodeStructure.children.push(this.getComponentWithoutProperties(constitutiveStatement.constitutiveFunction, CONSTITUTIVE_FUNCTION));
 
     // constitutingProperty
     if (constitutiveStatement.constitutingProperty) {
-      nodeStructure.children.push(getComponentWithProperties(constitutiveStatement.constitutingProperty, CONSTITUTING_PROPERTY));
+      nodeStructure.children.push(this.getComponentWithProperties(constitutiveStatement.constitutingProperty, CONSTITUTING_PROPERTY));
     }
 
     // activationCondition
     if (constitutiveStatement.activationCondition) {
-      nodeStructure.children.push(getStatementOrComponentWithoutProperties(constitutiveStatement.activationCondition, ACTIVATION_CONDITION));
+      nodeStructure.children.push(this.getStatementOrComponentWithoutProperties(constitutiveStatement.activationCondition, ACTIVATION_CONDITION));
     }
 
     // executionConstraint
     if (constitutiveStatement.executionConstraint) {
-      nodeStructure.children.push(getStatementOrComponentWithoutProperties(constitutiveStatement.executionConstraint, EXECUTION_CONSTRAINT));
+      nodeStructure.children.push(this.getStatementOrComponentWithoutProperties(constitutiveStatement.executionConstraint, EXECUTION_CONSTRAINT));
     }
 
     // orElse
     if (constitutiveStatement.orElse) {
-      nodeStructure.children.push(getStatementNodeStructure(constitutiveStatement.orElse, OR_ELSE + PREFIX_SEPARATOR));
+      nodeStructure.children.push(this.getStatementNodeStructure(constitutiveStatement.orElse, OR_ELSE + PREFIX_SEPARATOR));
     }
 
     return nodeStructure;
   }
 
-  function getSimpleNode(component, componentName) {
+  getSimpleNode(component, componentName) {
     // SimpleNode is either string or object with text, begin, length keys
     let nodeStructure = {
       text: {
@@ -377,18 +201,18 @@ $(document).ready(function () {
     return nodeStructure;
   }
 
-  function getComponentWithProperties(component, componentName) {
+  getComponentWithProperties(component, componentName) {
 
     if (component.logicalOperator) { // ComponentWithPropertiesCombination
-      return getComponentWithPropertiesCombination(component, componentName)
+      return this.getComponentWithPropertiesCombination(component, componentName)
     } else if (component.element) { // Component with loose properties
-      return getComponentWithLooseProperties(component, componentName);
+      return this.getComponentWithLooseProperties(component, componentName);
     } else { // SimpleNode
-      return getSimpleNode(component, componentName);
+      return this.getSimpleNode(component, componentName);
     }
   }
 
-  function getComponentWithPropertiesCombination(component, componentName) {
+  getComponentWithPropertiesCombination(component, componentName) {
     let nodeStructure = {
       text: {
         title: componentName + " " + COMBINATION_POSTFIX
@@ -398,31 +222,31 @@ $(document).ready(function () {
           title: LOGICAL_OPERATOR,
           name: component.logicalOperator
         },
-        children: component.components.map(subComponent => getComponentWithProperties(subComponent, componentName))
+        children: component.components.map(subComponent => this.getComponentWithProperties(subComponent, componentName))
       }]
     };
 
     return nodeStructure;
   }
 
-  function getComponentWithLooseProperties(component, componentName) {
+  getComponentWithLooseProperties(component, componentName) {
     // it consists of simple node and properties
-    let nodeStructure = getSimpleNode(component.element, componentName);
-    nodeStructure.children = component.properties.map(property => getStatementOrComponentWithProperties(property, PROPERTY));
+    let nodeStructure = this.getSimpleNode(component.element, componentName);
+    nodeStructure.children = component.properties.map(property => this.getStatementOrComponentWithProperties(property, PROPERTY));
 
     return nodeStructure;
   }
 
-  function getStatementOrComponentWithProperties(component, componentName) {
+  getStatementOrComponentWithProperties(component, componentName) {
     // Component is Statement
     if (component.aim || component.constitutiveFunction || (component.logicalOperator && component.statements)) {
-      return getStatementNodeStructure(component, componentName + PREFIX_SEPARATOR);
+      return this.getStatementNodeStructure(component, componentName + PREFIX_SEPARATOR);
     } else { // Component is component with Properties 
-      return getComponentWithProperties(component, componentName);
+      return this.getComponentWithProperties(component, componentName);
     }
   }
 
-  function getComponentWithoutProperties(component, componentName) {
+  getComponentWithoutProperties(component, componentName) {
     if (component.logicalOperator) {
       let nodeStructure = {
         text: {
@@ -433,24 +257,113 @@ $(document).ready(function () {
             title: LOGICAL_OPERATOR,
             name: component.logicalOperator
           },
-          children: component.components.map(subComponent => getComponentWithoutProperties(subComponent, componentName))
+          children: component.components.map(subComponent => this.getComponentWithoutProperties(subComponent, componentName))
         }]
       };
 
       return nodeStructure;
 
     } else {
-      return getSimpleNode(component, componentName);
+      return this.getSimpleNode(component, componentName);
     }
   }
 
-  function getStatementOrComponentWithoutProperties(component, componentName) {
+  getStatementOrComponentWithoutProperties(component, componentName) {
     // Component is Statement
     if (component.aim || component.constitutiveFunction || (component.logicalOperator && component.statements)) {
-      return getStatementNodeStructure(component, componentName + PREFIX_SEPARATOR);
+      return this.getStatementNodeStructure(component, componentName + PREFIX_SEPARATOR);
     } else { // Component is component without Properties 
-      return getComponentWithoutProperties(component, componentName);
+      return this.getComponentWithoutProperties(component, componentName);
     }
   }
+
+}
+
+class VisualisationController {
+  constructor(treeDivId, prevButtonId, nextButtonId, fileInputId, counterId) {
+    this.treeDivId = treeDivId;
+    this.prevButtonId = prevButtonId;
+    this.nextButtonId = nextButtonId;
+    this.fileInputId = fileInputId;
+    this.counterId = counterId;
+    
+    this.treeParserHelper = new TreeParserHelper();
+    
+    this.currentTree = null;
+    this.currentStatementIndex = 0;
+    
+    this.yamlString = null;
+    this.statements = null;
+
+    $(this.nextButtonId).click(this.drawNextTree);
+    $(this.prevButtonId).click(this.drawPrevTree);
+    $(this.fileInputId).change(this.loadStatements);
+  }
+
+  /* 
+    ====================IMPORTANT !!=================================================
+    Declare all method as arrow functions so 'this' keyword refers to class instance
+    ====================IMPORTANT !!==================================================
+  */
+  loadStatements = async () => {
+    $(this.nextButtonId).prop('disabled', true);
+    $(this.prevButtonId).prop('disabled', true);
+    $(this.counterId).text('');
+
+    try {
+      var file;
+      
+      try {
+        file = $(this.fileInputId).prop('files')[0];
+      }
+      catch(error) {
+        return; // no file was selected
+      }
+
+      this.yamlString = await file.text();
+      this.statements = jsyaml.load(this.yamlString).statements;
+      if(!Array.isArray(this.statements)) {
+        alert('Uploaded yaml does not contain statements!');
+        return;
+      }
+    } catch(error) {
+      alert('Uploaded yaml file has incorrect format!');
+      return;
+    }
+    
+    $(this.nextButtonId).prop('disabled', false);
+    $(this.prevButtonId).prop('disabled', false);
+
+    this.currentStatementIndex = 0;
+    this.drawCurrentTree();
+  }
+
+  drawCurrentTree = () => {
+    if (this.currentTree) {
+      this.currentTree.destroy();
+    }
+    try {
+      this.currentTree = this.treeParserHelper.drawTree(this.treeDivId, this.statements[this.currentStatementIndex]);
+    } catch(error) {
+      alert(`Statement #${this.currentStatementIndex + 1} has incorrect format and cannot be parsed!`);
+    }
+    
+    $(this.counterId).text(`${this.currentStatementIndex + 1}/${this.statements.length}`)
+  }
+
+  drawNextTree = () => {
+    this.currentStatementIndex = (this.currentStatementIndex + 1) % this.statements.length;
+    this.drawCurrentTree();
+  }
+
+  drawPrevTree = () => {
+    this.currentStatementIndex = (this.currentStatementIndex + this.statements.length - 1) % this.statements.length;
+    this.drawCurrentTree();
+  }
+}
+
+$(document).ready(function () {
+  var leftStatementController = new VisualisationController('#left-treant-tree', '#left-prev-button', '#left-next-button', '#left-file-input', '#left-counter');
+  var rightStatementController = new VisualisationController('#right-treant-tree', '#right-prev-button', '#right-next-button', '#right-file-input', '#right-counter');
 
 });
