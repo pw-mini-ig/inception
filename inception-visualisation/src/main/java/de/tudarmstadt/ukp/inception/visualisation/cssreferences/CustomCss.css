@@ -8,10 +8,10 @@ h1 {
 }
 
 .left-container, .right-container {
-    flex-basis: 50%;
+    flex-basis: 45%;
     flex-shrink: 0;
     flex-grow: 0;
-    max-width: 50%;
+    max-width: 45%;
 }
 
 .float-left {
@@ -31,9 +31,8 @@ h1 {
 
 /* optional Container STYLES */
 .chart {
-    height: 600px;
-    margin: 5px;
-    width: 900px;
+    width: 100%;
+    height: auto;
 }
 .Treant > .node {
     padding: 3px;
