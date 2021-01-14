@@ -206,7 +206,7 @@ class TreeParserHelper {
     if (component.logicalOperator) { // ComponentWithPropertiesCombination
       return this.getComponentWithPropertiesCombination(component, componentName)
     } else if (component.element) { // Component with loose properties
-      return this.getComponentWithLooseProperties(component, componentName);
+      return this.getNodeWithProperties(component, componentName);
     } else { // SimpleNode
       return this.getSimpleNode(component, componentName);
     }
@@ -229,7 +229,7 @@ class TreeParserHelper {
     return nodeStructure;
   }
 
-  getComponentWithLooseProperties(component, componentName) {
+  getNodeWithProperties(component, componentName) {
     // it consists of simple node and properties
     let nodeStructure = this.getSimpleNode(component.element, componentName);
     nodeStructure.children = component.properties.map(property => this.getStatementOrComponentWithProperties(property, PROPERTY));
@@ -238,43 +238,86 @@ class TreeParserHelper {
   }
 
   getStatementOrComponentWithProperties(component, componentName) {
-    // Component is Statement
     if (component.aim || component.constitutiveFunction || (component.logicalOperator && component.statements)) {
       return this.getStatementNodeStructure(component, componentName + PREFIX_SEPARATOR);
-    } else { // Component is component with Properties 
-      return this.getComponentWithProperties(component, componentName);
+    } else if(component.logicalOperator && component.components) { 
+      return this.getStatementOrComponentWithPropertiesCombination(component, componentName);
+    } else if(component.element) {
+      return this.getNodeWithProperties(component, componentName);
+    } else {
+      return this.getSimpleNode(component, componentName);
     }
+  }
+
+  getStatementOrComponentWithPropertiesCombination(component, componentName) {
+    let nodeStructure = {
+      text: {
+        title: componentName + " " + COMBINATION_POSTFIX
+      },
+      children: [{
+        text: {
+          title: LOGICAL_OPERATOR,
+          name: component.logicalOperator
+        },
+        children: component.components.map(subComponent => this.getStatementOrComponentWithProperties(subComponent, componentName))
+      }]
+    };
+
+    return nodeStructure;
   }
 
   getComponentWithoutProperties(component, componentName) {
     if (component.logicalOperator) {
-      let nodeStructure = {
-        text: {
-          title: componentName + " " + COMBINATION_POSTFIX
-        },
-        children: [{
-          text: {
-            title: LOGICAL_OPERATOR,
-            name: component.logicalOperator
-          },
-          children: component.components.map(subComponent => this.getComponentWithoutProperties(subComponent, componentName))
-        }]
-      };
-
-      return nodeStructure;
+      return this.getComponentWithoutPropertiesCombination(component, componentName);
 
     } else {
       return this.getSimpleNode(component, componentName);
     }
+  }
+  
+  getComponentWithoutPropertiesCombination(component, componentName) {
+    let nodeStructure = {
+      text: {
+        title: componentName + " " + COMBINATION_POSTFIX
+      },
+      children: [{
+        text: {
+          title: LOGICAL_OPERATOR,
+          name: component.logicalOperator
+        },
+        children: component.components.map(subComponent => this.getComponentWithoutProperties(subComponent, componentName))
+      }]
+    };
+
+    return nodeStructure;
   }
 
   getStatementOrComponentWithoutProperties(component, componentName) {
     // Component is Statement
     if (component.aim || component.constitutiveFunction || (component.logicalOperator && component.statements)) {
       return this.getStatementNodeStructure(component, componentName + PREFIX_SEPARATOR);
-    } else { // Component is component without Properties 
-      return this.getComponentWithoutProperties(component, componentName);
+    } else if (component.logicalOperator) { // StatementOrComponentWithoutPropertiesCombination
+      return this.getStatementOrComponentWithoutPropertiesCombination(component, componentName);
+    } else {
+      return this.getSimpleNode(component, componentName);
     }
+  }
+
+  getStatementOrComponentWithoutPropertiesCombination(component, componentName) {
+    let nodeStructure = {
+      text: {
+        title: componentName + " " + COMBINATION_POSTFIX
+      },
+      children: [{
+        text: {
+          title: LOGICAL_OPERATOR,
+          name: component.logicalOperator
+        },
+        children: component.components.map(subComponent => this.getStatementOrComponentWithoutProperties(subComponent, componentName))
+      }]
+    };
+
+    return nodeStructure;
   }
 
 }
@@ -341,16 +384,15 @@ class VisualisationController {
   }
 
   drawCurrentTree = () => {
+    $(this.counterId).text(`${this.currentStatementIndex + 1}/${this.statements.length}`)
     if (this.currentTree) {
       this.currentTree.destroy();
     }
     try {
       this.currentTree = this.treeParserHelper.drawTree(this.treeDivId, this.statements[this.currentStatementIndex]);
     } catch(error) {
-      alert(`Statement #${this.currentStatementIndex + 1} has incorrect format and cannot be parsed! - ${this.statments[this.currentStatementIndex]?.text}`);
+      alert(`Statement #${this.currentStatementIndex + 1} has incorrect format and cannot be parsed!`);
     }
-    
-    $(this.counterId).text(`${this.currentStatementIndex + 1}/${this.statements.length}`)
   }
 
   drawNextTree = () => {
