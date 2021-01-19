@@ -8,10 +8,10 @@ h1 {
 }
 
 .left-container, .right-container {
-    flex-basis: 45%;
+    flex-basis: 50%;
     flex-shrink: 0;
     flex-grow: 0;
-    max-width: 45%;
+    max-width: 50%;
 }
 
 .float-left {
@@ -67,13 +67,13 @@ h1 {
 }
 
 .Treant .node {
-    width: 400px;
+    max-width: 300px;
+    width: fit-content;
 }
 
 input[type="file"] {
-    border: 1px solid red;
-    white-space: normal;
+    white-space: nowrap;
     word-wrap: break-word;
-    width: 200px;
-    overflow: auto;
+    text-overflow:ellipsis;
+    overflow: hidden;
 }
