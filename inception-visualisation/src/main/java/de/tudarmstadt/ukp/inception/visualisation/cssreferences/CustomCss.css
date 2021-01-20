@@ -26,6 +26,14 @@ h1 {
     text-align: center;
 }
 
+.diff-btn {
+  display: grid;
+  width: 100%;
+  justify-content: center;
+  button {
+    width: 100px
+  }
+}
 
 
 

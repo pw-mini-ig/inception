@@ -411,24 +411,26 @@ class VisualisationController {
 }
 
 class VController {
-  constructor(leftController, rightController, showDiffBtn) {
+  constructor(leftController, rightController, diffBtn) {
     this.leftController = leftController;
     this.rightController = rightController;
-    this.showDiffBtn = showDiffBtn;
+    this.diffBtn = diffBtn;
 
-    $(this.showDiffBtn).click(this.showDiff);
+    $(this.diffBtn).click(this.toggleDiffBtn);
   }
 
-  showDiff = () => {
+  toggleDiffBtn = () => {
     var dc = document.getElementById('diff-container');
     var tc = document.getElementById('tree-container')
 
-    var leftFile = this.leftController.getFileContent();
-    var rightFile = this.rightController.getFileContent();
+    if (dc.hidden == true) {
+      var leftFile = this.leftController.getFileContent();
+      var rightFile = this.rightController.getFileContent();
 
-    var diff = Diff.createTwoFilesPatch("file", "file", leftFile || "", rightFile || "");
-    dc.innerHTML = Diff2Html.html(diff, { inputFormat: 'diff', drawFileList: false, matching: 'lines', outputFormat: 'side-by-side' });
-    document.getElementsByClassName("d2h-file-name-wrapper")[0].hidden = true;
+      var diff = Diff.createTwoFilesPatch("file", "file", leftFile || "", rightFile || "");
+      dc.innerHTML = Diff2Html.html(diff, { inputFormat: 'diff', drawFileList: false, matching: 'lines', outputFormat: 'side-by-side' });
+      document.getElementsByClassName("d2h-file-header")[0].hidden = true;
+    }
 
     dc.hidden = !dc.hidden;
     tc.hidden = !tc.hidden;
