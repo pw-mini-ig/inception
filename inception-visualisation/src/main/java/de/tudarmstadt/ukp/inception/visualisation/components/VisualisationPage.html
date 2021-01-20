@@ -9,7 +9,11 @@
     <div class="main">
         <div id="spinner"></div>
         <h1>Statement visualisation</h1>
-        <div class="main-container">
+        <div>
+            <button id="diff-button" class="float-left">Toggle diff</button>
+        </div>
+        <div hidden="true" id="diff-container" />
+        <div class="main-container" id="tree-container">
             <div class="left-container">
                 <div>
                     <label for="left-file-input">Upload first yaml file</label>

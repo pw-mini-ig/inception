@@ -404,10 +404,41 @@ class VisualisationController {
     this.currentStatementIndex = (this.currentStatementIndex + this.statements.length - 1) % this.statements.length;
     this.drawCurrentTree();
   }
+
+  getFileContent = () => {
+    return this.yamlString;
+  }
+}
+
+class VController {
+  constructor(leftController, rightController, showDiffBtn) {
+    this.leftController = leftController;
+    this.rightController = rightController;
+    this.showDiffBtn = showDiffBtn;
+
+    $(this.showDiffBtn).click(this.showDiff);
+  }
+
+  showDiff = () => {
+    var dc = document.getElementById('diff-container');
+    var tc = document.getElementById('tree-container')
+
+    var leftFile = this.leftController.getFileContent();
+    var rightFile = this.rightController.getFileContent();
+
+    if (leftFile && rightFile) {
+      var diff = Diff.createTwoFilesPatch("file", "file", leftFile, rightFile);
+      dc.innerHTML = Diff2Html.html(diff, { inputFormat: 'diff', drawFileList: false, matching: 'lines', outputFormat: 'side-by-side' });
+      document.getElementsByClassName("d2h-file-name-wrapper")[0].hidden = true;
+    }
+
+    dc.hidden = !dc.hidden;
+    tc.hidden = !tc.hidden;
+  }
 }
 
 $(document).ready(function () {
   var leftStatementController = new VisualisationController('#left-treant-tree', '#left-prev-button', '#left-next-button', '#left-file-input', '#left-counter');
   var rightStatementController = new VisualisationController('#right-treant-tree', '#right-prev-button', '#right-next-button', '#right-file-input', '#right-counter');
-
+  var controller = new VController(leftStatementController, rightStatementController, "#diff-button");
 });

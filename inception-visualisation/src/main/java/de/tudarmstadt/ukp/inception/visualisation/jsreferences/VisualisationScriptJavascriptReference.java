@@ -1,11 +1,11 @@
 package de.tudarmstadt.ukp.inception.visualisation.jsreferences;
 
+import de.tudarmstadt.ukp.inception.visualisation.cssreferences.Diff2HtmlCssReference;
 import de.tudarmstadt.ukp.inception.visualisation.cssreferences.TreantCssReference;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import java.util.ArrayList;
@@ -37,9 +37,12 @@ public class VisualisationScriptJavascriptReference
             Application.get().getJavaScriptLibrarySettings().getJQueryReference()));
 
         dependencies.add(CssHeaderItem.forReference(TreantCssReference.get()));
+        dependencies.add(CssHeaderItem.forReference(Diff2HtmlCssReference.get()));
         dependencies.add(JavaScriptHeaderItem.forReference(RaphaelJavascriptReference.get()));
         dependencies.add(JavaScriptHeaderItem.forReference(TreantJavascriptReference.get()));
         dependencies.add(JavaScriptHeaderItem.forReference(JsYamlJavascriptReference.get()));
+        dependencies.add(JavaScriptHeaderItem.forReference(DiffScriptJavascriptReference.get()));
+        dependencies.add(JavaScriptHeaderItem.forReference(Diff2HtmlScriptJavascriptReference.get()));
 
         return dependencies;
     }
