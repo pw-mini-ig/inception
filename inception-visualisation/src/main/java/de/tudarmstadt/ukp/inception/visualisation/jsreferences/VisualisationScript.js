@@ -426,11 +426,9 @@ class VController {
     var leftFile = this.leftController.getFileContent();
     var rightFile = this.rightController.getFileContent();
 
-    if (leftFile && rightFile) {
-      var diff = Diff.createTwoFilesPatch("file", "file", leftFile, rightFile);
-      dc.innerHTML = Diff2Html.html(diff, { inputFormat: 'diff', drawFileList: false, matching: 'lines', outputFormat: 'side-by-side' });
-      document.getElementsByClassName("d2h-file-name-wrapper")[0].hidden = true;
-    }
+    var diff = Diff.createTwoFilesPatch("file", "file", leftFile || "", rightFile || "");
+    dc.innerHTML = Diff2Html.html(diff, { inputFormat: 'diff', drawFileList: false, matching: 'lines', outputFormat: 'side-by-side' });
+    document.getElementsByClassName("d2h-file-name-wrapper")[0].hidden = true;
 
     dc.hidden = !dc.hidden;
     tc.hidden = !tc.hidden;
