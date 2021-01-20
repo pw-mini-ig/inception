@@ -1,0 +1,45 @@
+<!--
+#Copyright 2020
+#Damian Rakus and Wojciech Socha
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:head> </wicket:head>
+
+<body>
+    <div class="main">
+        <div id="spinner"></div>
+        <h1>Statement visualisation</h1>
+        <div class="diff-btn">
+          <button id="diff-button">Toggle diff</button>
+        </div>
+        <div class="main-container" id="tree-container">
+            <div class="left-container">
+                <div>
+                    <label for="left-file-input">Upload first yaml file</label>
+                    <input type="file" id="left-file-input" accept=".yaml, .yml">
+                </div>
+                <div>
+                    <button disabled id="left-prev-button" class="float-left">Draw prev statement</button>
+                    <button disabled id="left-next-button" class="float-right">Draw next statement</button>
+                </div>
+                <h3 id="left-counter"></h3>
+                <div class="chart Treant loaded" id="left-treant-tree"></div>
+            </div>
+            <div class="right-container">
+                <div>
+                    <label for="right-file-input">Upload second yaml file</label>
+                    <input type="file" id="right-file-input" accept=".yaml, .yml">
+                </div>
+                <div>
+                    <button disabled id="right-prev-button" class="float-left">Draw prev statement</button>
+                    <button disabled id="right-next-button" class="float-right">Draw next statement</button>
+                </div>
+                <h3 id="right-counter"></h3>
+                <div class="chart Treant loaded" id="right-treant-tree"></div>
+            </div>
+        </div>
+      <div hidden="true" id="diff-container" />
+    </div>
+</body>
+
+</html>

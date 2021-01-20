@@ -75,7 +75,7 @@ import de.tudarmstadt.ukp.inception.app.config.InceptionBanner;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @ComponentScan(
     basePackages = { 
-            "de.tudarmstadt.ukp.inception",  
+            "de.tudarmstadt.ukp.inception",
             "de.tudarmstadt.ukp.clarin.webanno" },
     excludeFilters = {
         @Filter(type = FilterType.REGEX, pattern = ".*AutoConfiguration"),
