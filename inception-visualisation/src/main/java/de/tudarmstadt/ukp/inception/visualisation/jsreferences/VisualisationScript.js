@@ -421,7 +421,6 @@ class VController {
 
   toggleDiffBtn = () => {
     var dc = document.getElementById('diff-container');
-    var tc = document.getElementById('tree-container')
 
     if (dc.hidden == true) {
       var leftFile = this.leftController.getFileContent();
@@ -433,7 +432,6 @@ class VController {
     }
 
     dc.hidden = !dc.hidden;
-    tc.hidden = !tc.hidden;
   }
 }
 
